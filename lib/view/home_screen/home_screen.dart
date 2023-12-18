@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:paws_app/database/db.dart';
+import 'package:paws_app/view/home_screen/widgets/pets_grid_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +16,7 @@ class _HomecCreenState extends State<HomeScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.orange,
+        title: Text("PAWS"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -23,7 +26,7 @@ class _HomecCreenState extends State<HomeScreen> {
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
-            mainAxisExtent: 280,
+            mainAxisExtent: 290,
           ),
           itemBuilder: (context, index) => Column(
             children: [
@@ -34,28 +37,11 @@ class _HomecCreenState extends State<HomeScreen> {
                     height: 180,
                     color: Colors.orange,
                   ),
-                  Container(
-                    height: 100,
-                    color: Colors.green,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 40,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "hiii",
-                              maxLines: 1,
-                            ),
-                            Text(
-                              "hello",
-                              maxLines: 1,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  PetsGridWidget(
+                    title: DataBase().petsList[index].title,
+                    price: DataBase().petsList[index].price,
+                    place: DataBase().petsList[index].place,
+                    contact: DataBase().petsList[index].contact,
                   ),
                 ],
               ),
