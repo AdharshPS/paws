@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2)).then(
+    Future.delayed(Duration(seconds: 3)).then(
       (value) => Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -27,14 +27,19 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Lottie.asset("assets/animations/paws_animation.json"),
-        // Text(
-        //   "PAWS",
-        //   style: TextStyle(
-        //     fontSize: 30,
-        //     fontWeight: FontWeight.w800,
-        //   ),
-        // ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/animations/paws_animation.json"),
+            Text(
+              "PAWS",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paws_app/database/db.dart';
 
 class PetsGridWidget extends StatelessWidget {
   PetsGridWidget({
@@ -7,52 +8,92 @@ class PetsGridWidget extends StatelessWidget {
     required this.price,
     required this.place,
     required this.contact,
+    this.image,
   });
 
   String? title;
   String? price;
   String? place;
   String? contact;
+  String? image;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 110,
+      height: 290,
       decoration: BoxDecoration(
-        color: Colors.grey,
-        // image: DecorationImage(
-        //   image: AssetImage(""),
-        // ),
+// shadow for container
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 0.8,
+            spreadRadius: 0.8,
+            offset: Offset(0, 1),
+          )
+        ],
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.orange,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 40,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title!,
-                maxLines: 1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
               ),
-              SizedBox(height: 5),
-              Text(
-                price!,
-                maxLines: 1,
+              color: Colors.orange,
+              image: DecorationImage(
+                image: AssetImage(
+                  DataBase.cat,
+                ),
+                fit: BoxFit.cover,
               ),
-              SizedBox(height: 5),
-              Text(
-                place!,
-                maxLines: 1,
-              ),
-              SizedBox(height: 5),
-              Text(
-                contact!,
-                maxLines: 1,
-              ),
-            ],
+            ),
           ),
-        ),
+          Container(
+            height: 110,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 40,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title!,
+                      maxLines: 1,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      price!,
+                      maxLines: 1,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      place!,
+                      maxLines: 1,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      contact!,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

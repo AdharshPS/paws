@@ -17,6 +17,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
   List<dynamic> screensList = [
     HomeScreen(),
     SearchScreen(),
+    null,
     LikeScreen(),
     ProfileScreen(),
   ];
@@ -26,8 +27,23 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: itemIndex,
+        selectedItemColor: Colors.orange,
+        selectedFontSize: 12,
         onTap: (value) {
-          itemIndex = value;
+          value == 2
+              ? showModalBottomSheet(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  context: context,
+                  builder: (context) => Column(
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        child: Text("data"),
+                      )
+                    ],
+                  ),
+                )
+              : itemIndex = value;
           setState(() {});
         },
         items: [
@@ -38,6 +54,10 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: "Search",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle_outline),
+            label: "add",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
