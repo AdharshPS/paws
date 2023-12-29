@@ -1,16 +1,18 @@
+import 'package:image_picker/image_picker.dart';
+
 class PetsModel {
   String? title;
   String? price;
-  String? place;
+  String? location;
   String? contact;
-  String? image;
+  List<XFile?> image;
 
   PetsModel({
     required this.title,
     required this.price,
-    required this.place,
+    required this.location,
     required this.contact,
-    this.image,
+    required this.image,
   });
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paws_app/view/product_add_screen/product_add_screen.dart';
 import 'package:paws_app/view/home_screen/home_screen.dart';
 import 'package:paws_app/view/like_screen/like_screen.dart';
 import 'package:paws_app/view/profile_screen/profile_screen.dart';
@@ -14,6 +15,7 @@ class BottomNavigationBarScreen extends StatefulWidget {
 
 class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
   int itemIndex = 0;
+
   List<dynamic> screensList = [
     HomeScreen(),
     SearchScreen(),
@@ -21,6 +23,20 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
     LikeScreen(),
     ProfileScreen(),
   ];
+
+  onTabTapped(int index) {
+    if (index == 2) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductAddScreen(),
+          ));
+    } else {
+      itemIndex = index;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,21 +46,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
         selectedItemColor: Colors.orange,
         selectedFontSize: 12,
         onTap: (value) {
-          value == 2
-              ? showModalBottomSheet(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  context: context,
-                  builder: (context) => Column(
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        child: Text("data"),
-                      )
-                    ],
-                  ),
-                )
-              : itemIndex = value;
-          setState(() {});
+          onTabTapped(value);
         },
         items: [
           BottomNavigationBarItem(

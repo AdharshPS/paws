@@ -12,6 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomecCreenState extends State<HomeScreen> {
+  List<String> cat = ["cat", "dog", "puppy", "cow"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +70,8 @@ class _HomecCreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+
+// gridview
                 GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -81,8 +85,9 @@ class _HomecCreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) => PetsGridWidget(
                     title: DataBase.petsList[index].title,
                     price: DataBase.petsList[index].price,
-                    place: DataBase.petsList[index].place,
+                    place: DataBase.petsList[index].location,
                     contact: DataBase.petsList[index].contact,
+                    image: DataBase.petsList[index].image,
                   ),
                 ),
               ],

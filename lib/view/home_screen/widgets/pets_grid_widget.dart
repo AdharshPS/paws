@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:paws_app/database/db.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PetsGridWidget extends StatelessWidget {
   PetsGridWidget({
@@ -8,14 +10,14 @@ class PetsGridWidget extends StatelessWidget {
     required this.price,
     required this.place,
     required this.contact,
-    this.image,
+    required this.image,
   });
 
   String? title;
   String? price;
   String? place;
   String? contact;
-  String? image;
+  List<XFile?> image;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +48,7 @@ class PetsGridWidget extends StatelessWidget {
               ),
               color: Colors.orange,
               image: DecorationImage(
-                image: AssetImage(
-                  DataBase.cat,
-                ),
+                image: FileImage(File(image[0]!.path)),
                 fit: BoxFit.cover,
               ),
             ),
