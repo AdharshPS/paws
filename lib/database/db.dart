@@ -3,7 +3,11 @@ import 'package:paws_app/model/pets_model.dart';
 class DataBase {
   static List<PetsModel> petsList = [
     // PetsModel(
-    //     title: "dog", price: "1000", place: "thrissur", contact: "7852845"),
+    //     title: "dog",
+    //     price: "1000",
+    //     location: "thrissur",
+    //     contact: "7852845",
+    //     ),
     // PetsModel(
     //     title: "cat", price: "2000", place: "malappuram", contact: "7852845"),
     // PetsModel(

@@ -5,7 +5,7 @@ class PetsModel {
   String? price;
   String? location;
   String? contact;
-  List<XFile?> image;
+  List<XFile?> image = [];
 
   PetsModel({
     required this.title,
