@@ -1,4 +1,4 @@
-package com.example.paws_app
+package com.luminaraugust.pawsapp
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "582949241652",
+    "project_id": "paws-a6dd6",
+    "storage_bucket": "paws-a6dd6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582949241652:android:dfdf1f2f4b8d25b1f11b61",
+        "android_client_info": {
+          "package_name": "com.luminaraugust.pawsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2low7gwk2rrvrf-irRVNyHoqY9-CSSFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

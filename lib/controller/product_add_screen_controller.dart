@@ -86,6 +86,7 @@ class ProductAddScreenController with ChangeNotifier {
           image: pickedImageList,
         ),
       );
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -100,5 +101,23 @@ class ProductAddScreenController with ChangeNotifier {
       null;
     }
     notifyListeners();
+  }
+
+  Future<void> addUser(
+      {required List<XFile?> pickedImageList,
+      required TextEditingController price,
+      required TextEditingController location,
+      required TextEditingController contact,
+      required dynamic pets}) {
+    return pets
+        .add({
+          'title': DataBase.categories[itemIndex].name,
+          'price': price.text,
+          'place': location.text,
+          'contact': contact.text,
+          'image': "",
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
   }
 }
