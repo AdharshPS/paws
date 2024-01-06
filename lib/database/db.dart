@@ -27,10 +27,10 @@ class DataBase {
   static List<Categories> categories = [
     Categories(name: "Cat", image: "assets/images/cat_asset.jpg"),
     Categories(name: "Dog", image: "assets/images/dog_asset.png"),
-    Categories(name: "Bird", image: "assets/images/cat_asset.jpg"),
-    Categories(name: "Fish", image: "assets/images/dog_asset.png"),
-    Categories(name: "Rabbit", image: "assets/images/cat_asset.jpg"),
-    Categories(name: "Others", image: "assets/images/dog_asset.png"),
+    Categories(name: "Bird", image: "assets/images/bird_asset.png"),
+    Categories(name: "Fish", image: "assets/images/fish_paws.png"),
+    Categories(name: "Rabbit", image: "assets/images/rabbit_paws.jpeg"),
+    Categories(name: "Others", image: "assets/images/other_paws.jpeg"),
   ];
 
   static String cat = "assets/images/cat_asset.jpg";

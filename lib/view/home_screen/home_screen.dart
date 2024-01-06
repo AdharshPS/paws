@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:paws_app/database/db.dart';
 import 'package:paws_app/global_widgets/categories_widget.dart';
 import 'package:paws_app/view/home_screen/widgets/pets_grid_widget.dart';
-import 'package:paws_app/view/view_category_screen/view_category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,8 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomecCreenState extends State<HomeScreen> {
-  List<String> cat = ["cat", "dog", "puppy", "cow"];
-
   CollectionReference petsGrid =
       FirebaseFirestore.instance.collection('petsCollection');
 
@@ -45,7 +41,6 @@ class _HomecCreenState extends State<HomeScreen> {
                     children: [
                       CategoriesWidget(),
                       SizedBox(height: 10),
-
 // necessarry button need for values
                       // Center(
                       //   child: ElevatedButton(
@@ -82,7 +77,7 @@ class _HomecCreenState extends State<HomeScreen> {
                       return GridView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: DataBase.petsList.length,
+                          itemCount: snapshot.data!.docs.length,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -98,12 +93,9 @@ class _HomecCreenState extends State<HomeScreen> {
                               price: pets['price'],
                               place: pets['place'],
                               contact: pets['contact'],
-                              image: DataBase.petsList[0].image,
-                              // title: DataBase.petsList[index].title,
-                              // price: DataBase.petsList[index].price,
-                              // place: DataBase.petsList[index].location,
-                              // contact: DataBase.petsList[index].contact,
-                              // image: DataBase.petsList[index].image,
+                              image: pets['image'],
+                              isFavorite: pets['favorite'],
+                              pets: pets,
                             );
                           });
                     } else {

@@ -1,8 +1,9 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:paws_app/database/db.dart';
-import 'package:paws_app/model/pets_model.dart';
-import 'package:paws_app/view/bottom_navigator_screen/bottom_navigator_screen.dart';
 
 class ProductAddScreenController with ChangeNotifier {
   int itemIndex = 0;
@@ -12,6 +13,10 @@ class ProductAddScreenController with ChangeNotifier {
   ImagePicker picker = ImagePicker();
 
   bool selectedImage = false;
+
+  bool isLoading = false;
+
+  String url = "";
 
   selectCategory(int index) {
     itemIndex = index;
@@ -70,54 +75,80 @@ class ProductAddScreenController with ChangeNotifier {
     notifyListeners();
   }
 
-  submitFunction(
-      {required List<XFile?> pickedImageList,
-      required TextEditingController price,
-      required TextEditingController location,
-      required TextEditingController contact,
-      required BuildContext context}) {
-    if (isSubmitOkay == true) {
-      DataBase.petsList.add(
-        PetsModel(
-          title: DataBase.categories[itemIndex].name,
-          price: price.text,
-          location: location.text,
-          contact: contact.text,
-          image: pickedImageList,
-        ),
-      );
+  // submitFunction(
+  //     {required List<XFile?> pickedImageList,
+  //     required TextEditingController price,
+  //     required TextEditingController location,
+  //     required TextEditingController contact,
+  //     required BuildContext context}) {
+  //   if (isSubmitOkay == true) {
+  //     DataBase.petsList.add(
+  //       PetsModel(
+  //         title: DataBase.categories[itemIndex].name,
+  //         price: price.text,
+  //         location: location.text,
+  //         contact: contact.text,
+  //         image: pickedImageList,
+  //       ),
+  //     );
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BottomNavigationBarScreen(),
-        ),
-      );
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => BottomNavigationBarScreen(),
+  //       ),
+  //     );
 
+  //     isSelected = false;
+  //     isSubmitOkay = false;
+  //     selectedImage = false;
+  //   } else {
+  //     null;
+  //   }
+  //   notifyListeners();
+  // }
+
+  Future<void> addPets({
+    required String url,
+    required TextEditingController price,
+    required TextEditingController location,
+    required TextEditingController contact,
+    required dynamic pets,
+  }) {
+    return pets.add({
+      'title': DataBase.categories[itemIndex].name,
+      'price': price.text,
+      'place': location.text,
+      'contact': contact.text,
+      'image': url,
+      'favorite': false,
+    }).then((value) {
+      print(value);
       isSelected = false;
       isSubmitOkay = false;
       selectedImage = false;
-    } else {
-      null;
-    }
-    notifyListeners();
+      print("User Added");
+      notifyListeners();
+    }).catchError((error) => print("Failed to add user: $error"));
   }
 
-  Future<void> addUser(
-      {required List<XFile?> pickedImageList,
-      required TextEditingController price,
-      required TextEditingController location,
-      required TextEditingController contact,
-      required dynamic pets}) {
-    return pets
-        .add({
-          'title': DataBase.categories[itemIndex].name,
-          'price': price.text,
-          'place': location.text,
-          'contact': contact.text,
-          'image': "",
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+  imageStore(XFile? image) async {
+    final uniqueNameStamp = DateTime.now().microsecondsSinceEpoch;
+    if (image != null) {
+// create root reference
+      final storageRef = FirebaseStorage.instance.ref();
+// create folder reference
+      Reference imageRef = storageRef.child("image");
+// reference to image path
+      Reference uploadRef = imageRef.child(uniqueNameStamp.toString());
+// put image to path
+      await uploadRef.putFile(File(image.path));
+// get image download url
+      final downloadUrl = await uploadRef.getDownloadURL();
+      url = downloadUrl;
+    } else {
+      url = "";
+    }
+    notifyListeners();
   }
 }

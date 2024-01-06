@@ -1,7 +1,6 @@
-import 'dart:io';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:paws_app/view/pets_details_screen/pets_details_screen.dart';
 
 class PetsGridWidget extends StatefulWidget {
@@ -12,21 +11,26 @@ class PetsGridWidget extends StatefulWidget {
     required this.place,
     required this.contact,
     required this.image,
+    required this.isFavorite,
+    required this.pets,
   });
 
   String? title;
   String? price;
   String? place;
   String? contact;
-  List<XFile?> image;
+  // List<XFile?> image;
+  String image;
+  bool isFavorite;
+  dynamic pets;
 
   @override
   State<PetsGridWidget> createState() => _PetsGridWidgetState();
 }
 
 class _PetsGridWidgetState extends State<PetsGridWidget> {
-  bool isFavorite = false;
-
+  CollectionReference petsGrid =
+      FirebaseFirestore.instance.collection('petsCollection');
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -35,11 +39,8 @@ class _PetsGridWidgetState extends State<PetsGridWidget> {
           context,
           MaterialPageRoute(
             builder: (context) => PetsDetailsScreen(
-              image: widget.image,
-              title: widget.title,
-              contact: widget.contact,
-              price: widget.price,
-              place: widget.place,
+              isFavorite: widget.isFavorite,
+              pets: widget.pets,
             ),
           ),
         );
@@ -66,16 +67,32 @@ class _PetsGridWidgetState extends State<PetsGridWidget> {
               children: [
                 Container(
                   height: 180,
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
                     ),
                     color: Colors.orange,
-                    image: DecorationImage(
-                      image: FileImage(File(widget.image[0]!.path)),
-                      fit: BoxFit.cover,
+                    // image: DecorationImage(
+                    //   image: NetworkImage(widget.image),
+                    //   fit: BoxFit.cover,
+                    // ),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.image,
+                    fit: BoxFit.cover,
+                    // width: double.infinity,
+                    placeholder: (context, url) => Center(
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        child: CircularProgressIndicator(
+                          color: Colors.red[400],
+                        ),
+                      ),
                     ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
                 Container(
@@ -126,10 +143,12 @@ class _PetsGridWidgetState extends State<PetsGridWidget> {
             top: 10,
             child: InkWell(
               onTap: () {
-                isFavorite == false ? isFavorite = true : isFavorite = false;
-                setState(() {});
+                print(widget.pets.id);
+                petsGrid.doc(widget.pets.id).update({
+                  'favorite': widget.isFavorite == false ? true : false,
+                });
               },
-              child: isFavorite == false
+              child: widget.isFavorite == false
                   ? Icon(
                       Icons.favorite_border,
                       color: Colors.black,

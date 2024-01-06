@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:paws_app/controller/product_add_screen_controller.dart';
 import 'package:paws_app/database/db.dart';
+import 'package:paws_app/view/bottom_navigator_screen/bottom_navigator_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProductAddScreen extends StatefulWidget {
@@ -14,6 +16,9 @@ class ProductAddScreen extends StatefulWidget {
 }
 
 class _ProductAddScreenState extends State<ProductAddScreen> {
+  CollectionReference petsGrid =
+      FirebaseFirestore.instance.collection('petsCollection');
+
   final locationTextController = TextEditingController();
   final priceTextController = TextEditingController();
   final contactTextController = TextEditingController();
@@ -299,20 +304,36 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
           height: 50,
           width: MediaQuery.sizeOf(context).width,
           child: ElevatedButton(
-            onPressed: () {
-              functionProvider.submitFunction(
-                  pickedImageList: pickedImageList,
+            onPressed: () async {
+              if (variableProvider.isLoading == false) {
+                variableProvider.isLoading = true;
+                await functionProvider.imageStore(pickedImageList[0]);
+                await functionProvider.addPets(
+                  url: variableProvider.url,
                   price: priceTextController,
                   location: locationTextController,
                   contact: contactTextController,
-                  context: context);
+                  pets: petsGrid,
+                );
+              } else {
+                null;
+              }
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BottomNavigationBarScreen(),
+                ),
+              );
+              variableProvider.isLoading = false;
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: variableProvider.isSubmitOkay == true
                   ? Colors.green
                   : Colors.red,
             ),
-            child: Text("Submit"),
+            child: variableProvider.isLoading == true
+                ? CircularProgressIndicator()
+                : Text("Submit"),
           ),
         ),
       ],

@@ -1,75 +1,104 @@
-import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class PetsDetailsScreen extends StatefulWidget {
-  PetsDetailsScreen(
-      {super.key,
-      required this.title,
-      required this.price,
-      required this.place,
-      required this.contact,
-      required this.image});
+  PetsDetailsScreen({
+    super.key,
+    required this.isFavorite,
+    required this.pets,
+  });
 
-  List<XFile?> image;
-  String? title;
-  String? price;
-  String? place;
-  String? contact;
+  bool isFavorite;
+  dynamic pets;
 
   State<PetsDetailsScreen> createState() => _PetsDetailsScreenState();
 }
 
 class _PetsDetailsScreenState extends State<PetsDetailsScreen> {
+  CollectionReference petsGrid =
+      FirebaseFirestore.instance.collection('petsCollection');
   @override
   build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  widget.image.length,
-                  (index) => Container(
-                    height: 300,
-                    width: MediaQuery.sizeOf(context).width,
-                    child: Image.file(
-                      File(
-                        widget.image[index]!.path,
+      body: SafeArea(
+        child: StreamBuilder(
+            stream: petsGrid.orderBy('timestamp').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: 300,
+                            child: PageView.builder(
+                              itemCount: 1,
+                              itemBuilder: (context, index) => Container(
+                                width: MediaQuery.sizeOf(context).width,
+                                child: Image.network(
+                                  widget.pets['image'],
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: IconButton(
+                              onPressed: () {
+                                print(widget.pets.id);
+                                petsGrid.doc(widget.pets.id).update({
+                                  'favorite':
+                                      widget.isFavorite == false ? true : false,
+                                });
+                              },
+                              icon: widget.pets['favorite'] == false
+                                  ? Icon(
+                                      Icons.favorite_border,
+                                      color: Colors.black,
+                                    )
+                                  : Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
-                      fit: BoxFit.cover,
-                    ),
+                      SizedBox(height: 25),
+                      Text(widget.pets['title']),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Icon(Icons.location_on),
+                          SizedBox(width: 5),
+                          Text(widget.pets['place']),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text(widget.pets['price']),
+                          Text(" RS only"),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text(widget.pets['contact']),
+                      SizedBox(height: 10),
+                    ],
                   ),
-                ),
-              ),
-            ),
-            SizedBox(height: 25),
-            Text(widget.title ?? ""),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(Icons.location_on),
-                SizedBox(width: 5),
-                Text(widget.place ?? ""),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Text(widget.price ?? ""),
-                Text("RS only"),
-              ],
-            ),
-            SizedBox(height: 10),
-            Text(widget.contact ?? ""),
-            SizedBox(height: 10),
-          ],
-        ),
+                );
+              } else {
+                return Center(
+                  child: Text(""),
+                );
+              }
+            }),
       ),
     );
   }
