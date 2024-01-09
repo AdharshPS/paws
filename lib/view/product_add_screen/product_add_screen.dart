@@ -316,7 +316,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                   pets: petsGrid,
                 );
               } else {
-                null;
+                variableProvider.isLoading = false;
               }
               Navigator.pushReplacement(
                 context,

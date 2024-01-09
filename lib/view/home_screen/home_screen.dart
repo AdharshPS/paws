@@ -89,11 +89,6 @@ class _HomecCreenState extends State<HomeScreen> {
 // document snapshot
                             DocumentSnapshot pets = snapshot.data!.docs[index];
                             return PetsGridWidget(
-                              title: pets['title'],
-                              price: pets['price'],
-                              place: pets['place'],
-                              contact: pets['contact'],
-                              image: pets['image'],
                               isFavorite: pets['favorite'],
                               pets: pets,
                             );

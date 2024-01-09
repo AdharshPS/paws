@@ -3,34 +3,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:paws_app/view/pets_details_screen/pets_details_screen.dart';
 
-class PetsGridWidget extends StatefulWidget {
+class PetsGridWidget extends StatelessWidget {
   PetsGridWidget({
     super.key,
-    required this.title,
-    required this.price,
-    required this.place,
-    required this.contact,
-    required this.image,
     required this.isFavorite,
     required this.pets,
   });
 
-  String? title;
-  String? price;
-  String? place;
-  String? contact;
-  // List<XFile?> image;
-  String image;
   bool isFavorite;
   dynamic pets;
 
-  @override
-  State<PetsGridWidget> createState() => _PetsGridWidgetState();
-}
-
-class _PetsGridWidgetState extends State<PetsGridWidget> {
   CollectionReference petsGrid =
       FirebaseFirestore.instance.collection('petsCollection');
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -39,8 +24,8 @@ class _PetsGridWidgetState extends State<PetsGridWidget> {
           context,
           MaterialPageRoute(
             builder: (context) => PetsDetailsScreen(
-              isFavorite: widget.isFavorite,
-              pets: widget.pets,
+              isFavorite: isFavorite,
+              pets: pets,
             ),
           ),
         );
@@ -80,7 +65,7 @@ class _PetsGridWidgetState extends State<PetsGridWidget> {
                     // ),
                   ),
                   child: CachedNetworkImage(
-                    imageUrl: widget.image,
+                    imageUrl: pets['image'],
                     fit: BoxFit.cover,
                     // width: double.infinity,
                     placeholder: (context, url) => Center(
@@ -112,22 +97,22 @@ class _PetsGridWidgetState extends State<PetsGridWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.title ?? "",
+                            pets['title'],
                             maxLines: 1,
                           ),
                           SizedBox(height: 5),
                           Text(
-                            widget.price ?? "",
+                            pets['price'],
                             maxLines: 1,
                           ),
                           SizedBox(height: 5),
                           Text(
-                            widget.place ?? "",
+                            pets['place'],
                             maxLines: 1,
                           ),
                           SizedBox(height: 5),
                           Text(
-                            widget.contact ?? "",
+                            pets['contact'],
                             maxLines: 1,
                           ),
                         ],
@@ -139,16 +124,16 @@ class _PetsGridWidgetState extends State<PetsGridWidget> {
             ),
           ),
           Positioned(
-            right: 10,
-            top: 10,
-            child: InkWell(
-              onTap: () {
-                print(widget.pets.id);
-                petsGrid.doc(widget.pets.id).update({
-                  'favorite': widget.isFavorite == false ? true : false,
+            right: 0,
+            top: 0,
+            child: IconButton(
+              onPressed: () {
+                print(pets.id);
+                petsGrid.doc(pets.id).update({
+                  'favorite': isFavorite == false ? true : false,
                 });
               },
-              child: widget.isFavorite == false
+              icon: isFavorite == false
                   ? Icon(
                       Icons.favorite_border,
                       color: Colors.black,

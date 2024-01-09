@@ -22,7 +22,7 @@ class _PetsDetailsScreenState extends State<PetsDetailsScreen> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-            stream: petsGrid.orderBy('timestamp').snapshots(),
+            stream: petsGrid.where(widget.pets.id).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Padding(

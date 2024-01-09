@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paws_app/controller/product_add_screen_controller.dart';
+import 'package:paws_app/controller/login_or_register_controller.dart';
 import 'package:paws_app/view/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,6 +28,9 @@ class MainScreen extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => ProductAddScreenController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AddUserController(),
         ),
       ],
       child: MaterialApp(
